@@ -62,7 +62,7 @@ Steps:
 
 Here is an example policy to allow cmtr-4960e3c6-iam-pela-iam_role to list, get, and put objects in the bucket:
 
-'''
+
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -89,7 +89,25 @@ Here is an example policy to allow cmtr-4960e3c6-iam-pela-iam_role to list, get,
     }
   ]
 }
-'''
+
 Replace your-account-id with your AWS account ID.
 This policy grants the cmtr-4960e3c6-iam-pela-iam_role permission to list, get, and put objects in cmtr-4960e3c6-iam-pela-bucket-1-9017607 but no access to any other buckets.
 Click Save changes.
+
+
+```terraform
+terraform {
+  required_providers {
+    routeros = {
+      source = "terraform-routeros/routeros"
+    }
+  }
+}
+
+provider "routeros" {
+  hosturl  = "(http|https|api|apis)://my.router.local[:port]"
+  username = "my_username"
+  password = "my_super_secret_password"
+}
+
+```
