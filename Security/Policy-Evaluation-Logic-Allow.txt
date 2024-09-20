@@ -48,3 +48,46 @@ Steps:
     Give the policy a name like ListAllBucketsPolicy and click Create policy.
 
 This policy allows the role to list all the S3 buckets.
+
+2. Create a Resource-Based Policy for the S3 Bucket
+
+Next, you need to create a resource-based policy for the specific bucket (cmtr-4960e3c6-iam-pela-bucket-1-9017607) to allow the IAM role to get, put, and list objects.
+Steps:
+
+    Go to the S3 console.
+    In the left navigation pane, click on Buckets.
+    Find and select the bucket cmtr-4960e3c6-iam-pela-bucket-1-9017607.
+    Under the Permissions tab, scroll down to Bucket policy.
+    Click Edit to add a new bucket policy.
+
+Here is an example policy to allow cmtr-4960e3c6-iam-pela-iam_role to list, get, and put objects in the bucket:
+
+'''{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607/*"
+    }
+  ]
+}'''
+Replace your-account-id with your AWS account ID.
+This policy grants the cmtr-4960e3c6-iam-pela-iam_role permission to list, get, and put objects in cmtr-4960e3c6-iam-pela-bucket-1-9017607 but no access to any other buckets.
+Click Save changes.
