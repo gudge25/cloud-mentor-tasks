@@ -147,6 +147,8 @@ Create a JSON file for the bucket policy, e.g., s3-bucket-policy.json, with the 
 Replace your-account-id with your actual AWS account ID and bucket with  your S3 bucket
 
 Apply policy to S3 bucker
-```aws s3api put-bucket-policy \
+```
+aws s3api put-bucket-policy \
     --bucket cmtr-4960e3c6-iam-pela-bucket-1-9017607 \
-    --policy file://s3-bucket-policy.json```
+    --policy file://s3-bucket-policy.json
+```
