@@ -28,3 +28,23 @@ To make sure everything has been done correctly, use the AWS policy simulator fo
     You can't list, get, or put objects in the cmtr-4960e3c6-iam-pela-bucket-2-9017607 bucket.
 
 Optionally: Instead of using the AWS policy simulator, you can assume the role and perform the required checks.
+
+========
+Solution: 
+1. Create and Attach an Identity-Based Policy to the IAM Role
+
+This policy will allow the IAM role (cmtr-4960e3c6-iam-pela-iam_role) to list all S3 buckets.
+Steps:
+
+    Go to the IAM console.
+    In the left navigation pane, click on Roles.
+    Find and select the role cmtr-4960e3c6-iam-pela-iam_role.
+    Under the Permissions tab, click Add permissions.
+    Select Create inline policy.
+    Choose the Service as S3.
+    Under Actions, choose ListAllMyBuckets (this allows listing all S3 buckets).
+    Under Resources, choose All resources (this is because you want to list all buckets, not just specific ones).
+    Click Review policy.
+    Give the policy a name like ListAllBucketsPolicy and click Create policy.
+
+This policy allows the role to list all the S3 buckets.
