@@ -94,3 +94,59 @@ Here is an example policy to allow cmtr-4960e3c6-iam-pela-iam_role to list, get,
 Replace your-account-id with your AWS account ID.
 This policy grants the cmtr-4960e3c6-iam-pela-iam_role permission to list, get, and put objects in cmtr-4960e3c6-iam-pela-bucket-1-9017607 but no access to any other buckets.
 Click Save changes.
+
+===
+AWS CLI
+1. Create and Attach the Identity-Based Policy to the IAM Role
+```
+aws iam put-role-policy \
+    --role-name cmtr-4960e3c6-iam-pela-iam_role \
+    --policy-name ListAllBucketsPolicy \
+    --policy-document '{
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "s3:ListAllMyBuckets",
+          "Resource": "*"
+        }
+      ]
+    }'
+```
+
+2. Create a Resource-Based Policy for the S3 Bucket
+Create a JSON file for the bucket policy, e.g., s3-bucket-policy.json, with the following content:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607/*"
+    }
+  ]
+}
+```
+Replace your-account-id with your actual AWS account ID and bucket with  your S3 bucket
+
+Apply policy to S3 bucker
+```aws s3api put-bucket-policy \
+    --bucket cmtr-4960e3c6-iam-pela-bucket-1-9017607 \
+    --policy file://s3-bucket-policy.json```
