@@ -95,19 +95,32 @@ This policy grants the cmtr-4960e3c6-iam-pela-iam_role permission to list, get, 
 Click Save changes.
 
 
-```terraform
-terraform {
-  required_providers {
-    routeros = {
-      source = "terraform-routeros/routeros"
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::your-account-id:role/cmtr-4960e3c6-iam-pela-iam_role"
+      },
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-pela-bucket-1-9017607/*"
     }
-  }
-}
-
-provider "routeros" {
-  hosturl  = "(http|https|api|apis)://my.router.local[:port]"
-  username = "my_username"
-  password = "my_super_secret_password"
+  ]
 }
 
 ```
