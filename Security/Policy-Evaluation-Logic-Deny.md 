@@ -1,0 +1,67 @@
+Lab Description
+
+The purpose of this task is to explore the process of evaluating policies and to configure both identity-based policy and resource-based policy for a specific role.
+Task Resources
+
+Region-specific resources are created in the us-east-1 region. For more details about regional services, see AWS Services by Region.
+
+In this task, you will work with the following resources:
+
+    IAM Role cmtr-4960e3c6-iam-peld-iam_role: You will grant specific permissions for this role and check to make sure they are applied successfully.
+    S3 Bucket cmtr-4960e3c6-iam-peld-bucket-9346688: A bucket with an existing policy.
+
+Objectives
+
+In two moves, you must:
+
+    Grant full access to the Amazon S3 service for the cmtr-4960e3c6-iam-peld-iam_role role. Please use an existing AWS policy; do not create your own.
+    Update the resource-based S3 bucket policy to prohibit the deletion of any objects inside the cmtr-4960e3c6-iam-peld-bucket-9346688 bucket specifically for the cmtr-4960e3c6-iam-peld-iam_role role.
+
+One move is to create, update, or delete an AWS resource. Some verification steps may pass without any action, but to complete the task, you must ensure that all the steps are passed.
+Task Verification
+
+To ensure everything has been done correctly, use the policy simulator for the cmtr-4960e3c6-iam-peld-iam_role role and check to make sure you cannot delete objects in the cmtr-4960e3c6-iam-peld-bucket-9346688 bucket.
+
+===
+Solution:
+1. Grant Full Access to S3 for the IAM Role
+attach  AmazonS3FullAccess to role
+```
+aws iam attach-role-policy \
+    --role-name cmtr-4960e3c6-iam-peld-iam_role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+```
+
+2. Update the S3 Bucket Policy to Prohibit Object Deletion
+
+Next, you need to update the resource-based policy on the S3 bucket cmtr-4960e3c6-iam-peld-bucket-9346688 to explicitly deny deletion of objects by the cmtr-4960e3c6-iam-peld-iam_role.
+Step:
+
+    Create the Bucket Policy JSON: Save the following policy as a JSON file, e.g., s3-deny-delete-policy.json:
+
+```
+{
+        "Version": "2012-10-17",
+        "Statement": [
+                {
+                        "Sid": "PublicReadGetObject",
+                        "Effect": "Deny",
+                        "Principal": {
+                                "AWS": "arn:aws:iam::108782095910:role/cmtr-4960e3c6-iam-peld-iam_role"
+                        },
+                        "Action": "s3:DeleteObject",
+                        "Resource": "arn:aws:s3:::cmtr-4960e3c6-iam-peld-bucket-8281149/*"
+                }
+        ]
+}
+
+
+```
+
+Apply policy
+```
+aws s3api put-bucket-policy \  
+    --bucket cmtr-4960e3c6-iam-peld-bucket-8281149 \
+    --policy file://s3-deny-delete-policy.json
+
+```
